@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Walter Mitty's Secret Life</title>
+    <style>
+        /* Font and Basic Styles */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f0f0f0;
+            transition: background-color 0.5s ease;
+            overflow: hidden; 
+        }
+
+        /* Main Container */
+        .container {
+            width: 90%;
+            max-width: 1000px;
+            padding: 20px;
+            text-align: center;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Dream Button Style */
+        .dream-buttons button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 15px 25px;
+            margin: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: bold;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        .dream-buttons button:hover {
+            background-color: #0056b3;
+            transform: translateY(-2px);
+        }
+        
+        /* Detail View Style (Default: Hidden) */
+        .detail-view {
+            display: none;
+            margin-top: 20px;
+            text-align: left;
+            border-top: 2px dashed #ccc;
+            padding-top: 20px;
+            position: relative;
+        }
+
+        /* Dream Mode Style */
+        .dream-mode {
+            background: #2a0000; 
+            color: #ffe082; 
+            border: 3px solid gold;
+            padding: 20px;
+            border-radius: 10px;
+            transition: all 0.5s ease;
+        }
+
+        .dream-mode h2 {
+            color: #ffcc00; 
+            font-family: 'Georgia', serif;
+            font-style: italic;
+            border-bottom: 2px solid #ffcc00;
+            padding-bottom: 10px;
+        }
+        
+        /* Reality Mode Style */
+        .reality-mode {
+            background: #e0e0e0; 
+            color: #333;
+            border: 3px solid #888;
+            padding: 20px;
+            border-radius: 10px;
+            transition: all 0.5s ease;
+        }
+        
+        .reality-mode h2 {
+            color: #555;
+            font-family: 'Arial', sans-serif;
+            font-style: normal;
+            border-bottom: 2px solid #888;
+            padding-bottom: 10px;
+        }
+
+        /* Toggle Button Style */
+        .toggle-button {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 15px 0;
+            cursor: pointer;
+            border-radius: 5px;
+            font-weight: bold;
+            display: block;
+            width: 100%;
+            transition: background-color 0.3s;
+        }
+
+        .toggle-button:hover {
+            background-color: #c82333;
+        }
+
+        /* Song Info Style */
+        .song-info {
+            margin-top: 15px;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            font-size: 0.9em;
+        }
+        
+        .reality-mode .song-info {
+            background: rgba(0, 0, 0, 0.1);
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Walter Mitty's Secret Life &#x1f92b;</h1>
+    <p>Click the buttons below to explore the heroic fantasy worlds Mr. Mitty escapes to from his mundane reality.</p>
+    <hr>
+
+    <div class="main-view">
+        <div class="dream-buttons">
+            <button onclick="showDream('commander')">&#x1f680; Commander in a Storm</button>
+            <button onclick="showDream('surgeon')">&#x1f489; Genius Surgeon</button>
+            <button onclick="showDream('marksman')">&#x1f52b; Courtroom Marksman</button>
+            <button onclick="showDream('captain')">&#x1f4a3; Captain on the Front</button>
+            <button onclick="showDream('undefeated')">&#x1f451; The Undefeated</button>
+        </div>
+    </div>
+
+    <div id="dreamDetail" class="detail-view">
+        <button id="toggleBtn" class="toggle-button" onclick="toggleMode()">&#x27a1; Return to Reality</button>
+
+        <div id="contentBox" class="dream-mode">
+            <h2 id="title"></h2>
+            <p id="description"></p>
+            
+            <div id="songContainer">
+                <div class="song-info">
+                    <strong>&#x1f3b5; Mitty's Dream Theme Song:</strong> <span id="songTitle"></span>
+                    <audio id="dreamAudio" controls loop style="width: 100%; margin-top: 5px;"></audio>
+                    <p class="song-tip">*(If the MP3 file path is incorrect, the music will not play. Please place your audio files in the same folder and ensure the file names are correct.)</p>
+                </div>
+            </div>
+        </div>
+        
+        <button class="toggle-button" onclick="resetToMain()">&#x1f3e0; Back to Main Menu</button>
+    </div>
+
+</div>
+
+<script>
+    const DREAMS = {
+        'commander': {
+            dreamTitle: "&#x1f680; Commander in a Storm: Pilot of the Eight-Engine Hydroplane",
+            dreamDesc: "“WE'RE going through!” The Commander, whose voice is like thin ice breaking, pilots a huge Navy plane through a hurricane. 'Switch on No. 8 auxiliary!' The crew grins: 'The Old Man'll get us through.'",
+            realityTitle: "&#x1f697; Reality: Wife's Speed Warning (55 mph)",
+            realityDesc: "“You're driving too fast! I don't like to go more than forty.” The Commander returns to being a passive husband who is scolded for his driving and told he is 'tensed up again.'",
+            songTitle: "Pocketa! Pocketa! Commander's Breakthrough Waltz",
+            songFile: "Captain Mitty in the Sky(1)_mitty.mp3" // 사용자 지정 파일명 적용 완료
+        },
+        'surgeon': {
+            dreamTitle: "&#x1f489; Genius Surgeon: Savior of Coreopsis",
+            dreamDesc: "In the operating room, Dr. Mitty is introduced to world specialists. When the anesthetizer breaks down, he snaps: 'Give me a fountain pen!' He fixes the machine and takes over the fatal 'Coreopsis' case.",
+            realityTitle: "&#x1f17f; Reality: The Clueless Driver in the Parking Lot",
+            realityDesc: "After passing the hospital, Mitty reaches the lot. He is scolded by the attendant for being in the 'Exit Only' lane and meekly hands over his keys so the attendant can park the car 'with a show-off skill.'",
+            songTitle: "Fountain Pen Piston: Dr. Mitty's Heartbeat",
+            songFile: "Dr. Mitty’s Magic Hands_mitty(2).mp3" // 사용자 지정 파일명 적용 완료
+        },
+        'marksman': {
+            dreamTitle: "&#x1f52b; Courtroom Marksman: The Legend of the Left Hand",
+            dreamDesc: "Under intense questioning from the District Attorney, Mitty calmly identifies his 'Webley-Vickers 50.80' pistol. He silences the court, stating he could have killed the victim at three hundred feet 'with my left hand.'",
+            realityTitle: "&#x1f6d2; Reality: Forgotten Errands and Puppy Biscuits",
+            realityDesc: "He struggles to remember the other item his wife told him to get, listing random words: 'initiative and referendum?' He eventually remembers the mundane item: 'Puppies Bark for It' biscuit.",
+            songTitle: "300-Foot Killshot: Courtroom Opera",
+            songFile: "The Marksman in the Court_mitty(3).mp3" // 사용자 지정 파일명 적용 완료
+        },
+        'captain': {
+            dreamTitle: "&#x1f4a3; Captain on the Front: One Life to Live",
+            dreamDesc: "In a dugout shaken by explosions, Captain Mitty straps on his pistol, volunteering for a suicide mission to destroy the ammunition dump. He smiles faintly: 'We only live once, Sergeant.'",
+            realityTitle: "&#x1fa91; Reality: Found Hiding in a Lobby Chair",
+            realityDesc: "Mrs. Mitty finds him in an old chair: 'Why do you have to hide in this old chair?' He defends himself: 'Does it ever occur to you that I am sometimes thinking?' She replies, 'I'm going to take your temperature.'",
+            songTitle: "We Only Live Once: Captain's Solemn March",
+            songFile: "Hero of the Smoke_mitty(4).mp3" // 사용자 지정 파일명 적용 완료
+        },
+        'undefeated': {
+            dreamTitle: "&#x1f451; The Undefeated: Final Standoff",
+            dreamDesc: "Standing against the drugstore wall, Mitty faces the firing squad in his final fantasy. 'To hell with the handkerchief,' he mutters scornfully, meeting his end with a faint, fleeting smile. Inscrutable to the last.",
+            realityTitle: "&#x2695; Reality: The Man Who Must Have His Temperature Taken",
+            realityDesc: "Walking to the parking lot, his wife tells him to wait, forgetting something. His final moment of defiance is interrupted by the reality of going home, where his wife promises to 'take your temperature.'",
+            songTitle: "The Smile Eternal: Requiem of the Immortal",
+            songFile: "The Last Smile_mitty(5).mp3" // 사용자 지정 파일명 적용 완료
+        }
+    };
+
+    let currentDreamKey = '';
+    let isDreamMode = true;
+    const detailView = document.getElementById('dreamDetail');
+    const contentBox = document.getElementById('contentBox');
+    const titleEl = document.getElementById('title');
+    const descriptionEl = document.getElementById('description');
+    const toggleBtn = document.getElementById('toggleBtn');
+    const audioEl = document.getElementById('dreamAudio');
+    const songTitleEl = document.getElementById('songTitle');
+
+    function showDream(key) {
+        currentDreamKey = key;
+        isDreamMode = true;
+        
+        document.querySelector('.main-view').style.display = 'none';
+        detailView.style.display = 'block';
+
+        updateContent();
+        contentBox.className = 'dream-mode';
+        
+        audioEl.src = DREAMS[key].songFile;
+        // The browser might require user interaction to play audio, but we set the source here.
+        audioEl.play().catch(e => console.log("Audio play failed (user interaction required):", e)); 
+
+        toggleBtn.textContent = '➡️ Return to Reality';
+    }
+
+    function updateContent() {
+        const data = DREAMS[currentDreamKey];
+        if (isDreamMode) {
+            titleEl.innerHTML = data.dreamTitle;
+            descriptionEl.innerHTML = data.dreamDesc.replace(/\(([^)]+)\)/g, '<b>$1</b>'); 
+            songTitleEl.textContent = data.songTitle;
+            document.getElementById('songContainer').style.display = 'block';
+        } else {
+            titleEl.innerHTML = data.realityTitle;
+            descriptionEl.innerHTML = data.realityDesc.replace(/\(([^)]+)\)/g, '<b>$1</b>'); 
+            songTitleEl.textContent = 'No music in Reality.';
+            document.getElementById('songContainer').style.display = 'none';
+        }
+    }
+
+    function toggleMode() {
+        isDreamMode = !isDreamMode;
+        
+        if (isDreamMode) {
+            contentBox.className = 'dream-mode';
+            toggleBtn.textContent = '➡️ Return to Reality';
+            audioEl.play().catch(e => console.log("Audio play failed:", e));
+        } else {
+            contentBox.className = 'reality-mode';
+            toggleBtn.textContent = '⬅️ Escape to Fantasy';
+            audioEl.pause();
+        }
+        
+        updateContent();
+    }
+
+    function resetToMain() {
+        document.querySelector('.main-view').style.display = 'block';
+        detailView.style.display = 'none';
+        audioEl.pause();
+        audioEl.currentTime = 0; 
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        resetToMain();
+    });
+</script>
+</body>
+</html>
